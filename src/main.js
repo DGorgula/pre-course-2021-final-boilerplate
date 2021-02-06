@@ -417,6 +417,6 @@ function addTask(valueToAdd) {
 function changePriority(event) {
     const priorityTop = prioritySelector.getBoundingClientRect().top;
     const priorityHeight = prioritySelector.getBoundingClientRect().height;
-    priorityHeight + (priorityTop/2)ף
+    priorityHeight + (priorityTop/2);
     console.log(priorityHeight + (priorityTop/2));
 }
