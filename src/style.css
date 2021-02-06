@@ -1,6 +1,6 @@
 :root {
     --corners: 0.5rem;
-    --heading-size: 2rem;
+    --heading-size: 1.5rem;
     --theme-color: #dc4d3f;
     --heading-color: #ffece8;
     --background-color: #fafafa;
@@ -62,6 +62,10 @@ body {
     
 }
 
+.contact-link:hover {
+    /* width: 300%; */
+}
+
 #contact-div {
     
     width: 100%;
@@ -88,6 +92,29 @@ body {
     height: 2rem;
 }
 
+a {
+    color: black;
+    text-decoration: none;
+  }
+#gmail-logo:hover {
+    /* mask-image: url(./assets/gmail.svg); */
+    /* content: icon; */
+content: url(./assets/gmail.svg);
+width: 2rem;
+height: 2rem;
+}
+#telegram-logo:hover {
+    fill:#0088cc;
+}
+
+#github-logo:hover {
+    fill:#4078c0;
+}
+
+#discord-logo:hover {
+    fill:#7289da;
+}
+
 /*      Main CSS         */
 main {
     grid-column: 6/21;
@@ -98,6 +125,12 @@ main {
     /* border-bottom-left-radius: var(--corners); */
     border-top-left-radius: var(--corners);
 }
+
+.checkbox {
+    width: 5%;
+}
+
+
 
 /*      Control CSS      */
 #Control {
@@ -113,6 +146,7 @@ main {
     justify-content: space-evenly;
 }
 
+
 /*      Priority Selector CSS        */
 #selector-span {
     display: flex;
@@ -125,6 +159,9 @@ main {
     appearance: none;
     border: none;
     background-color: transparent;
+}
+#priority-selector:focus {
+    border: none;
 }
 
 #selector-svg {
@@ -163,6 +200,7 @@ main {
 /*      Keyboard Mode CSS        */
 #command-input {
     position: fixed;
+    width: 100%;
     bottom: 0;
     left: 2rem;
     grid-column: 1/4;
@@ -170,6 +208,9 @@ main {
     border: none;
     font-size: 3rem;
     opacity: 30%;
+    background: -webkit-linear-gradient(right, #eee, #333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 .keyset {
     display: inline-block;
@@ -201,10 +242,9 @@ main {
     height: 70%;
     /* margin-top:; */
     background-color: var(--theme-color);
-    margin 0 auto;
+    margin: 0 auto;
     justify-content: center;
     align-content: center;
-    margin 0 auto;
     box-shadow: 0 2rem 3rem black;
 }
 
@@ -237,6 +277,7 @@ main {
 }
 .todo-text {
     display: inline-block;
+    width: 50%;
     
 }
 .todo-priority {
@@ -256,6 +297,7 @@ main {
 
 .delete-button::before {
     content:url(./assets/unitrash.svg);
+    width: 10%;
 }
 
 hr {

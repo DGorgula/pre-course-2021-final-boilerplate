@@ -4,16 +4,16 @@ const DB_NAME = "my-todo";
 
 // Gets data from persistent storage by the given key and returns it
 async function getPersistent(key) {
-  let response;
   const request = {
     headers: {'X-Master-Key': key
 }};
-  let respond = await fetch(`https://api.jsonbin.io/v3/b/6012bfd76bdb326ce4bc67af/latest`, request);
-  const texted = await respond.text();
-  const jsoned = JSON.parse(texted);
-  const content = jsoned['record'];
-  
-  return content;
+try {
+  let response = await fetch(`https://api.jsonbin.io/v3/b/601d120506934b65f52ebb62/latest`, request);
+  const data = JSON.parse( await response.text())['record'];
+  return data;
+} catch (error) {
+  console.log('Network error, in GET request: '+error);
+}
 
   
   }
@@ -26,7 +26,7 @@ async function setPersistent(key, data) {
     headers: { 'Content-Type': 'application/json' , 'X-Master-Key': key
 },
 body: JSON.stringify(data)};
-  const respond = await fetch("https://api.jsonbin.io/v3/b/6012bfd76bdb326ce4bc67af", request);
+  const response = await fetch("https://api.jsonbin.io/v3/b/601d120506934b65f52ebb62", request);
   
   return true;
 }
