@@ -13,7 +13,7 @@ const commandInput = document.getElementById("command-input");
 const addButton = document.getElementById("add-button");
 const sortButton = document.getElementById("sort-button");
 const menu = document.getElementById("menu");
-const prioritySelector = document.getElementById("selector-svg");
+const prioritySelectorArrows = document.getElementById("selector-svg");
 const deleteAllButton = document.getElementById("delete-all-button");
 document.addEventListener("keydown", (e) => {
     if (e.key === ":" && document.activeElement !== commandInput) {
@@ -31,7 +31,7 @@ addButton.addEventListener("click", addTask);
 deleteAllButton.addEventListener("click", deleteOrRestoreAll);
 sortButton.addEventListener("click", sortList);
 menu.addEventListener("click", menuLinksHandler);
-prioritySelector.addEventListener('click', changePriority);
+prioritySelectorArrows.addEventListener('click', changePriority);
 
 document.addEventListener("keyup", (e) => {
     const prioritySelector = document.getElementById("priority-selector");
@@ -414,9 +414,18 @@ function addTask(valueToAdd) {
 }
 }
 
+
+// need to unite priority change by keyboard and priority change by mouse to the same function.
 function changePriority(event) {
-    const priorityTop = prioritySelector.getBoundingClientRect().top;
-    const priorityHeight = prioritySelector.getBoundingClientRect().height;
-    priorityHeight + (priorityTop/2);
-    console.log(priorityHeight + (priorityTop/2));
+    const prioritySelector = document.getElementById('priority-selector');
+    const priorityTop = prioritySelectorArrows.getBoundingClientRect().top;
+    const priorityHeight = prioritySelectorArrows.getBoundingClientRect().height;
+    if (event.y < priorityTop + (priorityHeight/2) && prioritySelector.selectedIndex < 4) {
+        prioritySelector.selectedIndex++;
+        return;    
+    }
+    else if (event.y > priorityTop + (priorityHeight/2) && prioritySelector.selectedIndex > 0) {
+        prioritySelector.selectedIndex--;
+    }
+    
 }
