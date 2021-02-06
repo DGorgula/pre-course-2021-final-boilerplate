@@ -8,7 +8,7 @@ async function getPersistent(key) {
     headers: {'X-Master-Key': key
 }};
 try {
-  let response = await fetch(`https://api.jsonbin.io/v3/b/601d120506934b65f52ebb62/latest`, request);
+  const response = await fetch(`https://api.jsonbin.io/v3/b/601d120506934b65f52ebb62/latest`, request);
   const data = JSON.parse( await response.text())['record'];
   return data;
 } catch (error) {

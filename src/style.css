@@ -40,11 +40,13 @@ body {
 #menu-title {
     grid-column: 1/6;
     grid-row: 3/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 0 4vw 0 0;
     padding: 0.7rem 0;
     background-color: var(--theme-color);
     border-top-right-radius: var(--corners);
-    text-align: center;
     color: var(--heading-color);
     font-size: var(--heading-size);
 }
@@ -108,7 +110,7 @@ height: 2rem;
 }
 
 #github-logo:hover {
-    fill:#4078c0;
+    fill:#6e5494;
 }
 
 #discord-logo:hover {
@@ -274,6 +276,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    align-items: center;
 }
 .todo-text {
     display: inline-block;

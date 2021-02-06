@@ -128,29 +128,35 @@ if (showByStatus === "important") {
     list.replaceChildren();
     recreateView(filtered);
     return;
-  }
+}
 }
 
 function sortList() {
     const fragment = document.createDocumentFragment();
+    const lines = document.querySelectorAll('hr');
+    lines.forEach((line) => {
+        line.remove();
+    })
     const listItems = Array.from(list.children);
     console.log(listItems);
     const orderedListItems = listItems.sort((firstItem, secondItem) => {
         const firstPriorityItem = firstItem.querySelector(".todo-priority")
-      .innerText;
-      const secondPriorityItem = secondItem.querySelector(".todo-priority")
-      .innerText;
-      return secondPriorityItem - firstPriorityItem;
-  });
-  
-  for (const item of orderedListItems) {
-      fragment.append(item);
+        .innerText;
+        const secondPriorityItem = secondItem.querySelector(".todo-priority")
+        .innerText;
+        return secondPriorityItem - firstPriorityItem;
+    });
+    for (const item of orderedListItems) {
+          const line = document.createElement('hr');
+        fragment.append(item);
+      fragment.append(line);
+
 }
-  list.appendChild(fragment);
+  list.append(fragment);
 }
 
 function updateCounter() {
-  document.getElementById("counter").innerText = list.children.length;
+  document.getElementById("counter").innerText = list.querySelectorAll('.todo-container').length;
 }
 
 function createElementWithAttribute(element, attributeType, attributValue) {
@@ -204,6 +210,7 @@ function recreateView(listToView = allTasks["my-todo"]) {
       trashSpan.value = "Restore";
     }
     list.append(task);
+    list.append(line);
 }
 }
 
