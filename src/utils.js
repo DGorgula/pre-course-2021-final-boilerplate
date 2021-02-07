@@ -9,7 +9,7 @@ async function getPersistent(key) {
 }};
 try {
   const response = await fetch(`https://api.jsonbin.io/v3/b/601d120506934b65f52ebb62/latest`, request);
-  const data = JSON.parse( await response.text())['record'];
+  const data = (await response.json())['record'];
   return data;
 } catch (error) {
   console.log('Network error, in GET request: '+error);
