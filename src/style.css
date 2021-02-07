@@ -15,40 +15,38 @@
     padding: 0;
 }
 body {
-    height: 100vh;
-    width: 100vw;
-    max-width: 100%;
+
     margin: 0;
     padding: 0;
+    font-family:Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+main {
+    height: 100vh;
+    margin: 1rem 2rem 0 2rem;
+    padding: 0;
+    /* width: 100vw;
+    max-width: 100%; */
+    /* margin-top: 1rem; */
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(12, 1fr);
-    font-family: 'Sriracha', cursive;
+    /* border: var(--border); */
+    /* border-top: none; */
+    /* border-bottom: none; */
+    border-end-end-radius: var(--corners);
 }
-
 /* CSS for Menu */
 #menu {
     position: relative;
-    grid-column: 1/6;
-    grid-row: 4/10;
-    margin: 0 4vw 0 0;
-    border: var(--border);
-    border-bottom-right-radius: var(--corners);
+    grid-column: 1/5;
+    grid-row: 2/13;
+    /* margin-left: 2rem; */
+    /* border: var(--border); */
+    border-right: var(--border);
+    border-left: var(--border);
+    /* border-bottom-right-radius: var(--corners); */
     background-color: var(--background-color);
-}
-
-#menu-title {
-    grid-column: 1/6;
-    grid-row: 3/4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 4vw 0 0;
-    padding: 0.7rem 0;
-    background-color: var(--theme-color);
-    border-top-right-radius: var(--corners);
-    color: var(--heading-color);
-    font-size: var(--heading-size);
 }
 
 .navigation-link {
@@ -118,14 +116,17 @@ height: 2rem;
 }
 
 /*      Main CSS         */
-main {
-    grid-column: 6/21;
-    grid-row: 2/12;
-    width: 100%;
-    border: var(--border);
-    border-bottom: none;
-    /* border-bottom-left-radius: var(--corners); */
-    border-top-left-radius: var(--corners);
+#content {
+    grid-column: 5/21;
+    grid-row: 2;
+    grid-row-end: auto;
+    border-right: var(--border);
+    /* margin-right: 2rem; */
+    
+}
+#View {
+    /* border-right: var(--border); */
+    margin: 0 2rem;
 }
 
 .checkbox {
@@ -136,12 +137,17 @@ main {
 
 /*      Control CSS      */
 #Control {
+    grid-column: 1/21;
+    grid-row: 1;
     display: flex;
+    height: 100%;
     align-items: center;
-    padding: 0.7rem 0;
-    width: 100%;
+    padding: 0;
+    
+    /* width: 100%; */
     background-color: var(--theme-color);
     border-top-left-radius: var(--corners);
+    border-top-right-radius: var(--corners);
     text-align: center;
     color: var(--heading-color);
     font-size: var(--heading-size);
@@ -153,6 +159,7 @@ main {
 #selector-span {
     display: flex;
     align-items: center;
+    /* justify-content: right; */
 }
 
 #priority-selector {
@@ -274,10 +281,13 @@ main {
 
 /*      Navigator CSS        */
 #navigator-container {
-    grid-column: 1/21;
-    grid-row: 1;
+    grid-column: 5/21;
+    grid-row: 2;
+    margin-right: 2rem;
+    border-right: var(--border);
+    padding-left: 4rem;
     font-size: 4rem;
-    opacity: 40%;
+    opacity: 10%;
     font-weight: bold;
 }
 
@@ -289,11 +299,17 @@ main {
 
 .todo-container {
     padding: 1rem;
+    border-bottom: var(--border);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
 }
+.todo-container:hover {
+    background-color:#dc4c3f7a;
+    border: var(--border);
+}
+
 .todo-text {
     display: inline-block;
     width: 50%;
@@ -322,5 +338,4 @@ main {
 hr {
     width: 90%;
     margin: 0 auto;
-    border: var(--border)
 }

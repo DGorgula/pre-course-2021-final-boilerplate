@@ -51,7 +51,7 @@ document.addEventListener("keyup", (e) => {
     } else if (e.key === "ArrowDown" && prioritySelector.selectedIndex > 0) {
         prioritySelector.selectedIndex--;
     } else {
-        currentInputNavigator.innerText = " > " + input.value;
+        currentInputNavigator.innerText = " | " + input.value;
         // showOnly();
     }
 } else if (document.activeElement === commandInput && e.key === "Enter") {
@@ -69,18 +69,18 @@ document.addEventListener("keyup", (e) => {
         input.focus();
         return;
         case ":s":
-            //sort the list
             sortList(list.children);
             commandInput.value = '';
             input.focus();
+            //sort the list
         return;
       case ":mi":
+          navigator.innerText = "Important";
         //show all important tasks (as click on menu > important)
-        navigator.innerText = "Important";
         break;
         case ":mt":
+            navigator.innerText = "To Do";
         //show all to do tasks (as click on menu > to do)
-        navigator.innerText = "To Do";
         break;
         case ":mc":
             navigator.innerText = "Completed";
@@ -95,13 +95,10 @@ document.addEventListener("keyup", (e) => {
         break;
       case ":d":
           deleteAllButton.click();
-          // deleteTasks(list.children, 'delete');
         //delete all tasks in View
         break;
         case ":r":
-        // deleteTasks(list.children, 'restore');
         deleteAllButton.click();
-        // navigator.innerText = 'All';
         //restore all tasks in View
         break;
     }
@@ -148,10 +145,6 @@ function showOnly(showByStatus = "relevant") {
 
 function sortList() {
     const fragment = document.createDocumentFragment();
-    const lines = document.querySelectorAll('hr');
-    lines.forEach((line) => {
-        line.remove();
-    })
     const listItems = Array.from(list.children);
     const orderedListItems = listItems.sort((firstItem, secondItem) => {
         const firstPriorityItem = firstItem.querySelector(".todo-priority")
@@ -161,9 +154,7 @@ function sortList() {
         return secondPriorityItem - firstPriorityItem;
     });
     for (const item of orderedListItems) {
-          const line = document.createElement('hr');
         fragment.append(item);
-      fragment.append(line);
 
 }
   list.append(fragment);
@@ -197,7 +188,6 @@ function createElementWithAttribute(element, attributeType, attributValue) {
 
 function recreateView(listToView = allTasks["my-todo"]) {
   for (const item of listToView) {
-      const line = document.createElement("hr");
     const task = createElementWithAttribute(
         "div",
       "className",
@@ -243,7 +233,6 @@ function recreateView(listToView = allTasks["my-todo"]) {
       trashSpan.value = "Restore";
     }
     list.append(task);
-    list.append(line);
 }
 }
 
