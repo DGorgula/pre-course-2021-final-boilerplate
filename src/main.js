@@ -38,21 +38,21 @@ document.addEventListener("keyup", (e) => {
   const navigator = document.getElementById("navigator");
   const currentInputNavigator = document.getElementById("current-input");
   if (e.key === "Escape") {
-      navigator.innerText = "All";
+      navigator.innerText = "To Do";
       cleanPage();
     return;
   } else if (document.activeElement === input) {
     showOnly();
     if (e.key === "Enter") {
-      addButton.click();
-      return;
+        addButton.click();
+        return;
     } else if (e.key === "ArrowUp" && prioritySelector.selectedIndex < 4) {
-      prioritySelector.selectedIndex++;
+        prioritySelector.selectedIndex++;
     } else if (e.key === "ArrowDown" && prioritySelector.selectedIndex > 0) {
-      prioritySelector.selectedIndex--;
+        prioritySelector.selectedIndex--;
     } else {
-      currentInputNavigator.innerText = " > " + input.value;
-      // showOnly();
+        currentInputNavigator.innerText = " > " + input.value;
+        // showOnly();
     }
 } else if (document.activeElement === commandInput && e.key === "Enter") {
     const list = document.getElementById("View");
@@ -60,25 +60,30 @@ document.addEventListener("keyup", (e) => {
     const tasksInView = document.querySelectorAll(".todo-container");
     const navigator = document.getElementById("navigator");
     const currentInputNavigator = document.getElementById("current-input");
+    const deleteAllButton = document.getElementById('delete-all-button');
     switch (commandInput.value) {
       case ":k":
         //show Keyboard-Mode keyset
         keysetDiv.hidden = false;
+        commandInput.value = '';
+        input.focus();
         return;
-      case ":s":
-          //sort the list
-        sortList(list.children);
+        case ":s":
+            //sort the list
+            sortList(list.children);
+            commandInput.value = '';
+            input.focus();
         return;
       case ":mi":
         //show all important tasks (as click on menu > important)
-        navigator.innerText = "important";
+        navigator.innerText = "Important";
         break;
         case ":mc":
-            navigator.innerText = "completed";
+            navigator.innerText = "Completed";
         //show all checked/completed tasks (as click on menu > checked)
         break;
       case ":md":
-        navigator.innerText = "deleted";
+        navigator.innerText = "Deleted";
         //show all deleted tasks (as click on menu > deleted)
         break;
       case ":c":
@@ -107,19 +112,25 @@ document.addEventListener("keyup", (e) => {
 
 function showOnly(showByStatus = "relevant") {
     const navigator = document.getElementById("navigator");
-    if (navigator.innerText !== "" && navigator.innerText !== "All") {
-        showByStatus = navigator.innerText;
-}
-const stringToFilter = input.value;
-if (showByStatus === "important") {
-    const filtered = allTasks["my-todo"].filter((item) => {
-      return item.priority > 2 && item.text.includes(stringToFilter);
-    });
-    list.replaceChildren();
-    recreateView(filtered);
-    return;
-  } else if (showByStatus) {
-      const filtered = allTasks["my-todo"].filter((item) => {
+    const deleteAllButton = document.getElementById("delete-all-button");
+    deleteAllToRestoreAllAndReversed(deleteAllButton, 'delete');
+    if (navigator.innerText !== "" && navigator.innerText !== "To Do") {
+        showByStatus = navigator.innerText.toLowerCase();
+    }
+    const stringToFilter = input.value;
+    if (showByStatus === "important") {
+        const filtered = allTasks["my-todo"].filter((item) => {
+            return item.priority > 2 && item.text.includes(stringToFilter);
+        });
+        list.replaceChildren();
+        recreateView(filtered);
+        return;
+    } else if (showByStatus) {
+        if (showByStatus === 'deleted') {
+            deleteAllToRestoreAllAndReversed(deleteAllButton, 'restore');
+            
+        }
+        const filtered = allTasks["my-todo"].filter((item) => {
           return (
           item["data-status"] === showByStatus &&
         item.text.includes(stringToFilter)
@@ -138,7 +149,6 @@ function sortList() {
         line.remove();
     })
     const listItems = Array.from(list.children);
-    console.log(listItems);
     const orderedListItems = listItems.sort((firstItem, secondItem) => {
         const firstPriorityItem = firstItem.querySelector(".todo-priority")
         .innerText;
@@ -196,11 +206,14 @@ function recreateView(listToView = allTasks["my-todo"]) {
     );
     trashSpan.value = "delete";
     trashSpan.addEventListener("click", deleteTasks);
+    trashSpan.style.display = 'none';
     const checkbox = createElementWithAttribute("input", "type", "checkbox");
     checkbox.className = "checkbox";
     checkbox.addEventListener("click", taskCompleter);
     taskPriority.innerText = item.priority;
+    taskPriority.style.display = 'none';
     taskCreationTime.innerText = item.date;
+    taskCreationTime.style.display = 'none';
     taskText.innerText = item.text;
     task.append(checkbox, taskText, taskCreationTime, taskPriority, trashSpan);
     if (item["data-status"] === "completed") {
@@ -249,7 +262,6 @@ async function deleteTasks(tasksToDelete, action) {
 //      consider to unite taskCompleter and deleteTasks functions
 function dataStatusChanger(elementOrObjectType, elementOrObject) {
   if (elementOrObjectType === "element") {
-      console.log(elementOrObject);
     if (elementOrObject.parentElement.dataset.status === "completed") {
         elementOrObject.parentElement.dataset.status = "relevant";
         return;
@@ -268,9 +280,7 @@ function taskCompleter(task) {
     if (task.target) {
       task = task.target;
     }
-  console.log("im here!", task.target);
   dataStatusChanger("element", task);
-  console.log("sadf");
   const currentTaskObj = allTasks["my-todo"].filter((item) => {
       if (
           item.date ===
@@ -314,6 +324,10 @@ function menuHandler(params) {
 }
 
 function deleteOrRestoreTask(task, action) {
+   console.log(task);
+    if (task.length === 0) {
+        return;
+    }
     if (action === "delete") {
     toStatus = "deleted";
     checkboxHiddenToState = true;
@@ -342,27 +356,34 @@ function deleteOrRestoreAll(event) {
     .toLowerCase()
     .slice(0, 7)
     .trim();
-  if (list.children.length <= 0) {
+    const itemsToDeleteOrRestore = list.querySelectorAll('.todo-container')
+  if (itemsToDeleteOrRestore.length <= 0) {
       alert(`There's nothing to ${editedDeleteButtonText}..`);
     return;
 }
   console.log(deleteButtonText);
   const action = editedDeleteButtonText;
-  deleteTasks(list.children, action);
-  if (deleteButtonText === "Delete All") {
-      console.log(action);
-
-    event.target.dataset.action = "Restore All";
-} else {
-    event.target.dataset.action = "Delete All";
-}
+  deleteTasks(itemsToDeleteOrRestore, action);
+  deleteAllToRestoreAllAndReversed(event.target);
   cleanPage();
 }
-
+function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
+    if (action) {
+        deleteAllButton.dataset.action = action;
+        return;
+    }
+    if (deleteAllButton.dataset.action === "delete") {
+        //   console.log(action);
+        
+        deleteAllButton.dataset.action = "restore";
+    } else {
+        deleteAllButton.dataset.action = "delete";
+    }
+}
 function menuLinksHandler(menuLink) {
     if (menuLink.target.className === "navigation-link") {
         const navigator = document.getElementById("navigator");
-        navigator.innerText = menuLink.target.innerText.toLowerCase();
+        navigator.innerText = menuLink.target.innerText;
         cleanPage();
     }
 }

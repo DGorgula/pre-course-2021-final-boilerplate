@@ -52,13 +52,13 @@ body {
 }
 
 .navigation-link {
-    padding: 1rem 0;
-    margin: 1rem 1rem;
+    padding: 1rem;
+    margin: 1rem 2rem;
     display: block;
-    text-align: center;
-    background-color: var(--theme-color);
+    text-align: left;
+    /* background-color: var(--theme-color); */
     /* border-radius: var(--corners); */
-    color: var(--heading-color);
+    /* color: var(--heading-color); */
     font-weight: bold;
     text-decoration: none;
     
@@ -175,10 +175,24 @@ main {
 #input-span {
     position: relative;
 }
-#input-text{
-    width: 100%;
+
+#text-input{
+    color:  white;
+    background: none;
     font-family: inherit;
+    border-style: none;
 }
+
+#text-input::placeholder{
+    color: white;
+}
+
+.no-outline:focus {
+    background-color: transparent;
+    outline: none;
+    border-style: none;
+}
+
 #add-button {
     margin: auto 0;
     background-color: transparent;
@@ -210,9 +224,15 @@ main {
     border: none;
     font-size: 3rem;
     opacity: 30%;
+    background-clip: text;
     background: -webkit-linear-gradient(right, #eee, #333);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+#command-input:focus {
+    background: none;
+    -webkit-text-fill-color:black;
+    opacity: 100%;
 }
 .keyset {
     display: inline-block;

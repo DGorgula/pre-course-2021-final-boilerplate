@@ -10,9 +10,10 @@
     <title>Whatodo</title>
   </head>
   <body>
-    <p id="navigator-container"> > <span id="navigator">All</span><span id="current-input"></span></p>
-    <h1 id="menu-title">Whatodo Menu</h1>
+    <p id="navigator-container"> > <span id="navigator">To Do</span><span id="current-input"></span></p>
+    <h1 id="menu-title"></h1>
     <nav id="menu">
+      <a href="#" class="navigation-link" id="todo-tasks">To Do</a>
       <a href="#" class="navigation-link" id="important-tasks">Important</a>
       <a href="#" class="navigation-link" id="completed-tasks">Completed</a>
       <a href="#" class="navigation-link" id="deleted-tasks">Deleted</a>
@@ -52,7 +53,7 @@
     <img id="delete-all-button" data-action="delete" src="./assets/full-trash.png" width="32" alt="" srcset="">
     <span id="input-span">
 
-      <input type="text" placeholder="Item to Add" id="text-input">
+      <input type="text" placeholder="Item to Find/Add" autocomplete="off" class= "no-outline" id="text-input">
       <button id="add-button">+</button>
     </span>
     <div id="selector-span">
@@ -86,7 +87,7 @@
         <span class="keyset">:s - sorts all tasks in view</span>
       </section>
     </main>
-      <input type="text" placeholder="press :k for all 'Keyboard-Mode' commands" id="command-input">
+      <input type="text" class="no-outline" autocomplete="off" placeholder="press :k for all 'Keyboard-Mode' commands" id="command-input">
     </body>
     </html>
     
