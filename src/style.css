@@ -41,7 +41,7 @@ main {
 }
 
 .navigation-link {
-    padding: 1rem 15%;
+    padding: 1rem 0 1rem 5vw;
     width: 100%;
     display: block;
     text-align: left;
@@ -56,7 +56,7 @@ main {
 
 #contact-div {
     width: 100%;
-    bottom: 2rem;
+    bottom: 3rem;
     position: absolute;
 }
 
@@ -204,14 +204,15 @@ height: 2rem;
     grid-row: 12;
     border: none;
     font-size: 3rem;
-    opacity: 30%;
-    background-clip: text;
-    background: -webkit-linear-gradient(right, #eee, #333);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 0px 0px 3px;
+    font-family: inherit;
+    /* background: -webkit-linear-gradient(#eee, rgb(255, 255, 255)); */
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.3) 100%); 
 }
 #command-input:focus {
     background: none;
+    font-weight: bold;
     -webkit-text-fill-color:black;
     opacity: 100%;
 }
@@ -275,7 +276,13 @@ height: 2rem;
 }
 .todo-container:hover {
     background-color:#dc4c3f7a;
-    border: var(--border);
+    /* border: var(--border); */
+}
+.current {
+    background-color:#dc4c3f7a;
+}
+.in-choice {
+    background-color: #dc4c3fb7;
 }
 
 .todo-text {

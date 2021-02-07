@@ -16,15 +16,28 @@ const menu = document.getElementById("menu");
 const prioritySelectorArrows = document.getElementById("selector-svg");
 const deleteAllButton = document.getElementById("delete-all-button");
 document.addEventListener("keydown", (e) => {
+  console.log(e.key);
     if (e.key === ":" && document.activeElement !== commandInput) {
         e.preventDefault();
         commandInput.value = ":";
         commandInput.focus();
-    }
+      }
+      else if (e.key === "Tab") {
+        const task = document.querySelector('.todo-container');
+        task.classList.add('current');
+        commandInput.focus();
+        e.preventDefault();
+      }
+      else if (e.key === " " && document.activeElement === commandInput) {
+      e.preventDefault();
+      }
 });
 
 document.addEventListener('click', (e) => {
-    console.log(e);
+  console.log(e);
+    if (e.target.className === 'todo-container') {
+      e.target.classList.add('in-choice');
+    }
 })
 
 addButton.addEventListener("click", addTask);
@@ -46,15 +59,43 @@ document.addEventListener("keyup", (e) => {
     if (e.key === "Enter") {
         addButton.click();
         return;
-    } else if (e.key === "ArrowUp" && prioritySelector.selectedIndex < 4) {
+    } 
+    else if (e.key === "Tab"){
+      console.log("captured!");
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    else if (e.key === "ArrowUp" && prioritySelector.selectedIndex < 4) {
         prioritySelector.selectedIndex++;
     } else if (e.key === "ArrowDown" && prioritySelector.selectedIndex > 0) {
         prioritySelector.selectedIndex--;
-    } else {
+    }
+    else {
         currentInputNavigator.innerText = " | " + input.value;
         // showOnly();
     }
-} else if (document.activeElement === commandInput && e.key === "Enter") {
+}
+else if (document.activeElement === commandInput && e.key === "ArrowDown") {
+  const currentTask = document.querySelector('.current');
+  const nextTask = currentTask.nextSibling;
+  currentTask.classList.remove('current');
+  nextTask.classList.add('current');
+}
+else if (document.activeElement === commandInput && e.key === "ArrowUp") {
+  const currentTask = document.querySelector('.current');
+  const previousTask = currentTask.previousSibling;
+  currentTask.classList.remove('current');
+  previousTask.classList.add('current');
+}
+else if(document.activeElement === commandInput && e.key === " ") {
+  console.log(document.querySelector('.current'));
+
+    const currentTask = document.querySelector('.current');
+    currentTask.classList.add('in-choice');
+  e.preventDefault();
+}
+else if (document.activeElement === commandInput && e.key === "Enter") {
     const list = document.getElementById("View");
     const keysetDiv = document.getElementById("keyboard-mode-keyset");
     const tasksInView = document.querySelectorAll(".todo-container");
