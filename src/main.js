@@ -78,6 +78,10 @@ document.addEventListener("keyup", (e) => {
         //show all important tasks (as click on menu > important)
         navigator.innerText = "Important";
         break;
+        case ":mt":
+        //show all to do tasks (as click on menu > to do)
+        navigator.innerText = "To Do";
+        break;
         case ":mc":
             navigator.innerText = "Completed";
         //show all checked/completed tasks (as click on menu > checked)
@@ -166,6 +170,22 @@ function sortList() {
 }
 
 function updateCounter() {
+    const relevantTasks = allTasks["my-todo"].filter((task) => {
+        return task['data-status'] === 'relevant';
+    });
+    const completedTasks = allTasks["my-todo"].filter((task) => {
+        return task['data-status'] === 'completed';
+    });
+    const deletedTasks = allTasks["my-todo"].filter((task) => {
+        return task['data-status'] === 'deleted';
+    });
+    const importantTasks = allTasks["my-todo"].filter((task) => {
+        return task.priority > 2;
+    });
+  document.getElementById("todo-counter").innerText = relevantTasks.length;
+  document.getElementById("important-counter").innerText = importantTasks.length;
+  document.getElementById("completed-counter").innerText = completedTasks.length;
+  document.getElementById("deleted-counter").innerText = deletedTasks.length;
   document.getElementById("counter").innerText = list.querySelectorAll('.todo-container').length;
 }
 
@@ -381,7 +401,7 @@ function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
     }
 }
 function menuLinksHandler(menuLink) {
-    if (menuLink.target.className === "navigation-link") {
+    if (menuLink.target.className === "counter-text") {
         const navigator = document.getElementById("navigator");
         navigator.innerText = menuLink.target.innerText;
         cleanPage();

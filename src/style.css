@@ -282,13 +282,9 @@ main {
 }
 
 /*      counter CSS      */
-#counter {
-    grid-column: 2/4;
-    grid-row: 10/12;
-    display: flex;
-    font-weight: bolder;
-    justify-content:center;
-    font-size: 6rem;
+.counter {
+    color: var(--big-text-color);
+    padding-left: 0.5rem;
 }
 
 .todo-container {
