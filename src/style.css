@@ -22,18 +22,12 @@ body {
 }
 
 main {
-    height: 100vh;
+    height: 98vh;
     margin: 1rem 2rem 0 2rem;
     padding: 0;
-    /* width: 100vw;
-    max-width: 100%; */
-    /* margin-top: 1rem; */
     display: grid;
     grid-template-columns: repeat(20, 1fr);
-    grid-template-rows: repeat(12, 1fr);
-    /* border: var(--border); */
-    /* border-top: none; */
-    /* border-bottom: none; */
+    grid-template-rows: 5vh repeat(11, 1fr);
     border-end-end-radius: var(--corners);
 }
 /* CSS for Menu */
@@ -41,40 +35,29 @@ main {
     position: relative;
     grid-column: 1/5;
     grid-row: 2/13;
-    /* margin-left: 2rem; */
-    /* border: var(--border); */
     border-right: var(--border);
     border-left: var(--border);
-    /* border-bottom-right-radius: var(--corners); */
     background-color: var(--background-color);
 }
 
 .navigation-link {
-    padding: 1rem;
-    margin: 1rem 2rem;
+    padding: 1rem 15%;
+    width: 100%;
     display: block;
     text-align: left;
-    /* background-color: var(--theme-color); */
-    /* border-radius: var(--corners); */
-    /* color: var(--heading-color); */
     font-weight: bold;
     text-decoration: none;
     
 }
 
-.contact-link:hover {
-    /* width: 300%; */
+.navigation-link:hover {
+    background-color: #efefef;
 }
 
 #contact-div {
-    
     width: 100%;
-    bottom: 0;
+    bottom: 2rem;
     position: absolute;
-    /* display: flex; */
-    /* width: fit-content; */
-    /* align-items: center;
-    justify-items: center; */
 }
 
 #contact-links-div {
@@ -97,8 +80,6 @@ a {
     text-decoration: none;
   }
 #gmail-logo:hover {
-    /* mask-image: url(./assets/gmail.svg); */
-    /* content: icon; */
 content: url(./assets/gmail.svg);
 width: 2rem;
 height: 2rem;
@@ -121,12 +102,9 @@ height: 2rem;
     grid-row: 2;
     grid-row-end: auto;
     border-right: var(--border);
-    /* margin-right: 2rem; */
-    
 }
 #View {
-    /* border-right: var(--border); */
-    margin: 0 2rem;
+    margin: 0 2rem 3rem 2rem;
 }
 
 .checkbox {
@@ -137,14 +115,11 @@ height: 2rem;
 
 /*      Control CSS      */
 #Control {
-    grid-column: 1/21;
     grid-row: 1;
+    grid-column: 1/21;
     display: flex;
-    height: 100%;
     align-items: center;
     padding: 0;
-    
-    /* width: 100%; */
     background-color: var(--theme-color);
     border-top-left-radius: var(--corners);
     border-top-right-radius: var(--corners);
@@ -159,7 +134,6 @@ height: 2rem;
 #selector-span {
     display: flex;
     align-items: center;
-    /* justify-content: right; */
 }
 
 #priority-selector {
@@ -254,22 +228,16 @@ height: 2rem;
 #keyboard-mode-content {
     display: flex;
     padding: 2rem 0;
-    /* justify-content: space-around; */
     flex-direction: column;
     align-content: space-around;
-    /* grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr); */
 }
 
 #keyboard-mode-keyset {
-    /* grid-column: 1/20;
-    grid-row: 1/12;  */
     position: fixed;
     top:  15%;
     left:  15%;
     width: 70%;
     height: 70%;
-    /* margin-top:; */
     background-color: var(--theme-color);
     margin: 0 auto;
     justify-content: center;
@@ -283,7 +251,7 @@ height: 2rem;
 #navigator-container {
     grid-column: 5/21;
     grid-row: 2;
-    margin-right: 2rem;
+    margin: 1rem 0;
     border-right: var(--border);
     padding-left: 4rem;
     font-size: 4rem;
@@ -322,12 +290,6 @@ height: 2rem;
 .todo-date {
     display: inline-block;
     
-}
-#myButton {
-    width: 20px;
-  height: 20px;
-  border: 6px, solid rgb(22, 25, 175);
-  border-radius: 50%;
 }
 
 .delete-button::before {

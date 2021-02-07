@@ -390,10 +390,15 @@ function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
     }
 }
 function menuLinksHandler(menuLink) {
-    if (menuLink.target.className === "counter-text") {
-        const navigator = document.getElementById("navigator");
+    const navigator = document.getElementById("navigator");
+    if (menuLink.target.className === "counter-text"){
         navigator.innerText = menuLink.target.innerText;
         cleanPage();
+    }
+    else if(menuLink.target.className === "navigation-link" && menuLink.target.id !== "total-tasks") {
+        navigator.innerText = menuLink.target.querySelector('.counter-text').innerText;
+        cleanPage();
+        
     }
 }
 

@@ -10,13 +10,39 @@
   </head>
   <body>
     <main>
+      <section id="Control">
+        
+        <!-- <button id="sort-button">Sort</button> -->
+        <!-- <button id="delete-all-button">Delete All</button> -->
+        <img id="delete-all-button" data-action="delete" src="./assets/full-trash.png" width="32" alt="" srcset="">
+        <span id="input-span">
+          
+          <input type="text" placeholder="Item to Find/Add" autocomplete="off" class= "no-outline" id="text-input">
+          <button id="add-button">+</button>
+        </span>
+        <div id="selector-span">
+          
+          <?xml version="1.0" ?><svg  id="selector-svg" height="1792" viewBox="0 0 1792 1792" width="1792" xmlns="http://www.w3.org/2000/svg"><path d="M1408 1088q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45zm0-384q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z"/></svg>
+          <select name="" id="priority-selector">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      
+      <?xml version="1.0" ?><svg id="sort-button" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 4H16M3 8H12M3 12H9M13 12L17 8M17 8L21 12M17 8V20" stroke="#4A5568" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+    </section>
       <nav id="menu">
-        <a href="#" class="navigation-link" id="todo-tasks"><span class="counter-text">To Do</span><span id="todo-counter" class="counter"></span></a>
-        <a href="#" class="navigation-link" id="important-tasks"><span class="counter-text">Important</span><span id="important-counter" class="counter"></span></a>
-        <a href="#" class="navigation-link" id="completed-tasks"><span class="counter-text">Completed</span><span id="completed-counter" class="counter"></span></a>
-        <a href="#" class="navigation-link" id="deleted-tasks"><span class="counter-text">Deleted</span><span id="deleted-counter" class="counter"></span></a>
-        <a href="#" class="navigation-link" id="total-tasks">Total<span id="counter" class="counter"></span></a>
-        <div id="contact-div">
+        <!-- <section id="navigation-div"> -->
+          <a href="#" class="navigation-link" id="todo-tasks"><span class="counter-text">To Do</span><span id="todo-counter" class="counter"></span></a>
+          <a href="#" class="navigation-link" id="important-tasks"><span class="counter-text">Important</span><span id="important-counter" class="counter"></span></a>
+          <a href="#" class="navigation-link" id="completed-tasks"><span class="counter-text">Completed</span><span id="completed-counter" class="counter"></span></a>
+          <a href="#" class="navigation-link" id="deleted-tasks"><span class="counter-text">Deleted</span><span id="deleted-counter" class="counter"></span></a>
+          <a href="#" class="navigation-link" id="total-tasks">Total<span id="counter" class="counter"></span></a>
+        <!-- </section> -->
+          <div id="contact-div">
           <p id="contact-title">Created by Danks</p>
           <div id="contact-links-div">
             <a href="https://github.com/DGorgula" target="/blank">
@@ -43,30 +69,6 @@
       </div>
     </div>
   </nav>
-  <section id="Control">
-    
-    <!-- <button id="sort-button">Sort</button> -->
-    <!-- <button id="delete-all-button">Delete All</button> -->
-    <img id="delete-all-button" data-action="delete" src="./assets/full-trash.png" width="32" alt="" srcset="">
-    <span id="input-span">
-      
-      <input type="text" placeholder="Item to Find/Add" autocomplete="off" class= "no-outline" id="text-input">
-      <button id="add-button">+</button>
-    </span>
-    <div id="selector-span">
-      
-      <?xml version="1.0" ?><svg  id="selector-svg" height="1792" viewBox="0 0 1792 1792" width="1792" xmlns="http://www.w3.org/2000/svg"><path d="M1408 1088q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45zm0-384q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z"/></svg>
-      <select name="" id="priority-selector">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-  </div>
-  
-  <?xml version="1.0" ?><svg id="sort-button" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 4H16M3 8H12M3 12H9M13 12L17 8M17 8L21 12M17 8V20" stroke="#4A5568" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-</section>
 <section id="content">
   <p id="navigator-container"><span id="navigator">To Do</span><span id="current-input"></span></p>
   <section id="View">
