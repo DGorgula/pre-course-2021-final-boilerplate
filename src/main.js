@@ -13,10 +13,10 @@ const commandInput = document.getElementById("command-input");
 const addButton = document.getElementById("add-button");
 const sortButton = document.getElementById("sort-button");
 const menu = document.getElementById("menu");
+const completeAllButton = document.getElementById("complete-all-button");
 const prioritySelectorArrows = document.getElementById("selector-svg");
 const deleteAllButton = document.getElementById("delete-all-button");
 document.addEventListener("keydown", (e) => {
-  console.log(e.key);
     if (e.key === ":" && document.activeElement !== commandInput) {
         e.preventDefault();
         commandInput.value = ":";
@@ -34,9 +34,10 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener('click', (e) => {
-  console.log(e);
-    if (e.target.className === 'todo-container') {
-      e.target.classList.add('in-choice');
+  task = e.target.closest('.todo-container')
+    if (task) {
+
+      choose(task);
     }
 })
 
@@ -45,6 +46,7 @@ deleteAllButton.addEventListener("click", deleteOrRestoreAll);
 sortButton.addEventListener("click", sortList);
 menu.addEventListener("click", menuLinksHandler);
 prioritySelectorArrows.addEventListener('click', changePriority);
+completeAllButton.addEventListener('click', completeAll);
 
 document.addEventListener("keyup", (e) => {
     const prioritySelector = document.getElementById("priority-selector");
@@ -89,10 +91,8 @@ else if (document.activeElement === commandInput && e.key === "ArrowUp") {
   previousTask.classList.add('current');
 }
 else if(document.activeElement === commandInput && e.key === " ") {
-  console.log(document.querySelector('.current'));
-
     const currentTask = document.querySelector('.current');
-    currentTask.classList.add('in-choice');
+    choose(currentTask);
   e.preventDefault();
 }
 else if (document.activeElement === commandInput && e.key === "Enter") {
@@ -132,7 +132,8 @@ else if (document.activeElement === commandInput && e.key === "Enter") {
         //show all deleted tasks (as click on menu > deleted)
         break;
       case ":c":
-        //check current. c[1-9] will check the containter
+        completeAllButton.click();
+        //check all.
         break;
       case ":d":
           deleteAllButton.click();
@@ -260,7 +261,7 @@ function recreateView(listToView = allTasks["my-todo"]) {
     trashSpan.style.display = 'none';
     const checkbox = createElementWithAttribute("input", "type", "checkbox");
     checkbox.className = "checkbox";
-    checkbox.addEventListener("click", taskCompleter);
+    checkbox.addEventListener("click", completeTask);
     taskPriority.innerText = item.priority;
     taskPriority.style.display = 'none';
     taskCreationTime.innerText = item.date;
@@ -309,14 +310,50 @@ async function deleteTasks(tasksToDelete, action) {
     }
   showOnly();
 }
+
+async function completeTasks(tasksToComplete, action) {
+    if (action) {
+        if (tasksToComplete.length === undefined) {
+            // differ between single and multiple
+      tasksToComplete = tasksToComplete.target.parentElement;
+      completeTask(tasksToComplete, action);
+    } else {
+        for (const task of tasksToComplete) {
+          completeTask(task, action);
+        }
+    }
+  } else {
+      if (tasksToComplete.length === undefined) {
+      // differ between single and multiple
+      tasksToComplete = tasksToComplete.target.parentElement;
+      if (tasksToComplete.dataset.status !== "completed") {
+          completeTask(tasksToComplete, "check");
+      } else {
+          completeTask(tasksToComplete, "uncheck");
+      }
+    }
+  }
+  try {
+    await setPersistent(API_KEY, allTasks);
+} catch (e) {
+    alert(
+        "There was a problem sending data to the server,\n Please try to reload and repeat your last actions.\nThe specific error message is:\n" +
+        e
+        );
+    }
+  showOnly();
+}
 //      consider to unite taskCompleter and deleteTasks functions
 function dataStatusChanger(elementOrObjectType, elementOrObject) {
+  // console.log(elementOrObject.);
   if (elementOrObjectType === "element") {
-    if (elementOrObject.parentElement.dataset.status === "completed") {
-        elementOrObject.parentElement.dataset.status = "relevant";
+    const task =  elementOrObject.closest('.todo-container');
+    if (task.dataset.status === "completed") {
+      console.log("alright!");
+        task.dataset.status = "relevant";
         return;
     }
-    elementOrObject.parentElement.dataset.status = "completed";
+    task.dataset.status = "completed";
     return;
 }
   if (elementOrObject["data-status"] === "completed") {
@@ -326,16 +363,13 @@ function dataStatusChanger(elementOrObjectType, elementOrObject) {
     elementOrObject["data-status"] = "completed";
 }
 }
-function taskCompleter(task) {
+function completeTask(task) {
     if (task.target) {
       task = task.target;
     }
   dataStatusChanger("element", task);
   const currentTaskObj = allTasks["my-todo"].filter((item) => {
-      if (
-          item.date ===
-          task.parentElement.querySelector(".todo-created-at").innerText
-          ) {
+      if (item.date === task.querySelector(".todo-created-at").innerText) {
         dataStatusChanger("object", item);
         return true;
     }
@@ -358,6 +392,7 @@ function cleanPage() {
   commandInput.value = "";
   input.value = "";
   input.focus();
+  updateCounter();
   showOnly();
 }
 
@@ -374,7 +409,6 @@ function menuHandler(params) {
 }
 
 function deleteOrRestoreTask(task, action) {
-   console.log(task);
     if (task.length === 0) {
         return;
     }
@@ -406,12 +440,15 @@ function deleteOrRestoreAll(event) {
     .toLowerCase()
     .slice(0, 7)
     .trim();
-    const itemsToDeleteOrRestore = list.querySelectorAll('.todo-container')
+    let itemsToDeleteOrRestore = list.querySelectorAll('.todo-container')
+    const inChoice = Array.from(list.querySelectorAll('.in-choice'));
+    if (inChoice.length > 0) {
+      itemsToDeleteOrRestore = inChoice;
+    }
   if (itemsToDeleteOrRestore.length <= 0) {
       alert(`There's nothing to ${editedDeleteButtonText}..`);
     return;
 }
-  console.log(deleteButtonText);
   const action = editedDeleteButtonText;
   deleteTasks(itemsToDeleteOrRestore, action);
   deleteAllToRestoreAllAndReversed(event.target);
@@ -423,7 +460,6 @@ function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
         return;
     }
     if (deleteAllButton.dataset.action === "delete") {
-        //   console.log(action);
         
         deleteAllButton.dataset.action = "restore";
     } else {
@@ -432,21 +468,20 @@ function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
 }
 function menuLinksHandler(menuLink) {
     const navigator = document.getElementById("navigator");
-    if (menuLink.target.className === "counter-text"){
-        navigator.innerText = menuLink.target.innerText;
+    const navigationLink = menuLink.target.closest('.navigation-link');
+    if (navigationLink){
+      if (navigationLink.id === "total-tasks") {
+        return;
+      }
+        navigator.innerText = navigationLink.querySelector('.counter-text').innerText;
         cleanPage();
-    }
-    else if(menuLink.target.className === "navigation-link" && menuLink.target.id !== "total-tasks") {
-        navigator.innerText = menuLink.target.querySelector('.counter-text').innerText;
-        cleanPage();
-        
     }
 }
 
   function containerButtonsCallback(e) {
       if (e.target.className === "checkbox") {
         const checkbox = e.target;
-        taskCompleter(checkbox);
+        completeTask(checkbox);
   } else if (e.target.className === "delete-button") {
       deleteTasks(e.target.parentElement);
   }
@@ -511,4 +546,25 @@ function changePriority(event) {
         prioritySelector.selectedIndex--;
     }
     
+}
+function choose(task) {
+  if (task.classList.contains('in-choice')) {
+    task.classList.remove('in-choice');
+      return;
+  }
+  task.classList.add('in-choice');
+}
+function completeAll(tasks) {
+  let completeButtonText = event.target.dataset.action;
+  const editedCompleteButtonText = completeButtonText;
+  let itemsToComplete = list.querySelectorAll('.todo-container')
+  const inChoice = Array.from(list.querySelectorAll('.in-choice'));
+  if (inChoice.length > 0) {
+    itemsToComplete = inChoice;
+  }
+  if (itemsToComplete.length <= 0) {
+    alert(`There's nothing to ${editedCompleteButtonText}..`);
+    return;
+  }
+  completeTasks(itemsToComplete, editedCompleteButtonText);
 }

@@ -265,6 +265,9 @@ height: 2rem;
     color: var(--big-text-color);
     padding-left: 0.5rem;
 }
+#todo-tasks {
+    margin-top: 2rem;
+}
 
 .todo-container {
     padding: 1rem;
@@ -278,11 +281,11 @@ height: 2rem;
     background-color:#dc4c3f7a;
     /* border: var(--border); */
 }
-.current {
-    background-color:#dc4c3f7a;
-}
 .in-choice {
     background-color: #dc4c3fb7;
+}
+.current {
+    background-color:#dc4c3f7a;
 }
 
 .todo-text {
