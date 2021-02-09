@@ -22,10 +22,14 @@ document.addEventListener("keydown", (e) => {
         commandInput.value = ":";
         commandInput.focus();
       }
-      else if (e.key === "Tab") {
+      else if (e.key === "Tab" && !document.querySelector('.current')) {
         const task = document.querySelector('.todo-container');
         task.classList.add('current');
+        task.querySelector('.extended-data').style.display = 'flex';
         commandInput.focus();
+        e.preventDefault();
+      }
+      else if (e.key === "Tab") {
         e.preventDefault();
       }
       else if (e.key === " " && document.activeElement === commandInput) {
@@ -34,13 +38,13 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener('click', (e) => {
+  
   task = e.target.closest('.todo-container')
     if (task) {
 
       choose(task);
     }
-})
-
+});
 addButton.addEventListener("click", addTask);
 deleteAllButton.addEventListener("click", deleteOrRestoreAll);
 sortButton.addEventListener("click", sortList);
@@ -80,14 +84,30 @@ document.addEventListener("keyup", (e) => {
 }
 else if (document.activeElement === commandInput && e.key === "ArrowDown") {
   const currentTask = document.querySelector('.current');
+  if (!currentTask.nextSibling) {
+    return;
+  }
+  else if (!currentTask.classList.contains('in-choice') && !currentTask.classList.contains('mouse-current')) {
+    currentTask.querySelector('.extended-data').style.display = 'none';
+    
+  }
   const nextTask = currentTask.nextSibling;
+  nextTask.querySelector('.extended-data').style.display = 'flex';
   currentTask.classList.remove('current');
   nextTask.classList.add('current');
 }
 else if (document.activeElement === commandInput && e.key === "ArrowUp") {
   const currentTask = document.querySelector('.current');
+  if (!currentTask.previousSibling) {
+    return;
+  }
+  else if (!currentTask.classList.contains('in-choice') && !currentTask.classList.contains('mouse-current')) {
+    currentTask.querySelector('.extended-data').style.display = 'none';
+    
+  }
   const previousTask = currentTask.previousSibling;
   currentTask.classList.remove('current');
+  previousTask.querySelector('.extended-data').style.display = 'flex';
   previousTask.classList.add('current');
 }
 else if(document.activeElement === commandInput && e.key === " ") {
@@ -163,7 +183,7 @@ function showOnly(showByStatus = "relevant") {
     const stringToFilter = input.value;
     if (showByStatus === "important") {
         const filtered = allTasks["my-todo"].filter((item) => {
-            return item.priority > 2 && item.text.includes(stringToFilter);
+            return item.priority > 2 && item.text.includes(stringToFilter) && item['data-status'] !== 'deleted';
         });
         list.replaceChildren();
         recreateView(filtered);
@@ -256,26 +276,45 @@ function recreateView(listToView = allTasks["my-todo"]) {
       "className",
       "delete-button"
     );
+    const checkbox = createElementWithAttribute("input", "type", "checkbox");
+    const mainData = createElementWithAttribute("section", "className", "main-data");
+    const extendedData = createElementWithAttribute("section", "className", "extended-data");
     trashSpan.value = "delete";
     trashSpan.addEventListener("click", deleteTasks);
-    trashSpan.style.display = 'none';
-    const checkbox = createElementWithAttribute("input", "type", "checkbox");
     checkbox.className = "checkbox";
     checkbox.addEventListener("click", completeTask);
+    // const randomColor = createRandomColor();
     taskPriority.innerText = item.priority;
-    taskPriority.style.display = 'none';
+    taskPriority.style.display = "none";
     taskCreationTime.innerText = item.date;
-    taskCreationTime.style.display = 'none';
     taskText.innerText = item.text;
-    task.append(checkbox, taskText, taskCreationTime, taskPriority, trashSpan);
+    extendedData.append(taskCreationTime, taskPriority, trashSpan);
+    mainData.append(checkbox, taskText);
+    extendedData.style.display = 'none';
+    task.append(mainData, extendedData);
     if (item["data-status"] === "completed") {
         checkbox.checked = true;
+        checkbox.classList.add('checked');
     } else if (item["data-status"] === "deleted") {
         checkbox.hidden = true;
       trashSpan.value = "Restore";
     }
+    task.addEventListener('mouseover', (e) => {
+    if (task && e.toElement===task) {
+      task.querySelector('.extended-data').style.display = 'flex';
+      task.classList.add('mouse-current');
+      // e.stopPropagation();
+    }});
+    task.addEventListener('mouseout', (e) => {
+      if (e.toElement.classList.contains('todo-container') || e.toElement.id === 'content' ||  e.toElement.classList.contains('no-outline')) {
+        if (e.fromElement===task && !task.classList.contains('in-choice') && !task.classList.contains('current')) {
+          task.querySelector('.extended-data').style.display ='none';
+        }
+        task.classList.remove('mouse-current');
+      }
+  });
     list.append(task);
-}
+  }
 }
 
 async function deleteTasks(tasksToDelete, action) {
@@ -292,7 +331,7 @@ async function deleteTasks(tasksToDelete, action) {
   } else {
       if (tasksToDelete.length === undefined) {
       // differ between single and multiple
-      tasksToDelete = tasksToDelete.target.parentElement;
+      tasksToDelete = tasksToDelete.target.closest('.todo-container');
       if (tasksToDelete.dataset.status !== "deleted") {
           deleteOrRestoreTask(tasksToDelete, "delete");
       } else {
@@ -367,9 +406,10 @@ function completeTask(task) {
     if (task.target) {
       task = task.target;
     }
+    const taskDate = task.closest('.todo-container').querySelector('.todo-created-at');
   dataStatusChanger("element", task);
   const currentTaskObj = allTasks["my-todo"].filter((item) => {
-      if (item.date === task.querySelector(".todo-created-at").innerText) {
+      if (item.date === taskDate.innerText) {
         dataStatusChanger("object", item);
         return true;
     }
@@ -421,7 +461,6 @@ function deleteOrRestoreTask(task, action) {
     checkboxHiddenToState = false;
     toButtonContent = "delete";
 }
-
 task.dataset.status = toStatus;
 task.querySelector(".checkbox").hidden = checkboxHiddenToState;
   task.querySelector(".delete-button").innerText = toButtonContent;
@@ -567,4 +606,13 @@ function completeAll(tasks) {
     return;
   }
   completeTasks(itemsToComplete, editedCompleteButtonText);
+}
+
+function createRandomColor() {
+  const redHue = Math.floor(Math.random()*256);
+  const greenHue = Math.floor(Math.random()*256);
+  const blueHue = Math.floor(Math.random()*256);
+  const randomColor = `${redHue}, ${greenHue}, ${blueHue}`;
+
+  return randomColor;
 }
