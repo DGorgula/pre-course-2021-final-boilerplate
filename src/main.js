@@ -13,9 +13,14 @@ const commandInput = document.getElementById("command-input");
 const addButton = document.getElementById("add-button");
 const sortButton = document.getElementById("sort-button");
 const menu = document.getElementById("menu");
+const main = document.getElementById("main");
+const content = document.getElementById("content");
 const completeAllButton = document.getElementById("complete-all-button");
 const prioritySelectorArrows = document.getElementById("selector-svg");
 const deleteAllButton = document.getElementById("delete-all-button");
+if (content.getBoundingClientRect().height) {
+  
+}
 document.addEventListener("keydown", (e) => {
     if (e.key === ":" && document.activeElement !== commandInput) {
         e.preventDefault();
@@ -38,7 +43,15 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener('click', (e) => {
-  
+if (content.getBoundingClientRect().height < document.documentElement.clientHeight) {
+  content.style.border = 'none';
+  main.style.borderRight = 'var(--border)';
+}
+else {
+  content.style.borderRight = 'var(--border)';
+  main.style.borderRight = 'none';
+
+}
   task = e.target.closest('.todo-container')
     if (task) {
 
@@ -67,7 +80,6 @@ document.addEventListener("keyup", (e) => {
         return;
     } 
     else if (e.key === "Tab"){
-      console.log("captured!");
       e.preventDefault();
       e.stopPropagation();
       return;
@@ -89,9 +101,11 @@ else if (document.activeElement === commandInput && e.key === "ArrowDown") {
   }
   else if (!currentTask.classList.contains('in-choice') && !currentTask.classList.contains('mouse-current')) {
     currentTask.querySelector('.extended-data').style.display = 'none';
-    
   }
   const nextTask = currentTask.nextSibling;
+  if (nextTask.getBoundingClientRect().top > document.documentElement.getBoundingClientRect().height) {
+    window.scrollBy(0, document.documentElement.getBoundingClientRect().height)
+  }
   nextTask.querySelector('.extended-data').style.display = 'flex';
   currentTask.classList.remove('current');
   nextTask.classList.add('current');
@@ -106,6 +120,9 @@ else if (document.activeElement === commandInput && e.key === "ArrowUp") {
     
   }
   const previousTask = currentTask.previousSibling;
+  if (previousTask.getBoundingClientRect().top < 0) {
+    window.scrollBy(0, -document.documentElement.getBoundingClientRect().height)
+  }
   currentTask.classList.remove('current');
   previousTask.querySelector('.extended-data').style.display = 'flex';
   previousTask.classList.add('current');
@@ -176,22 +193,27 @@ else if (document.activeElement === commandInput && e.key === "Enter") {
 function showOnly(showByStatus = "relevant") {
     const navigator = document.getElementById("navigator");
     const deleteAllButton = document.getElementById("delete-all-button");
+    checkAllToUncheckAllAndReversed(completeAllButton, 'check')
     deleteAllToRestoreAllAndReversed(deleteAllButton, 'delete');
     if (navigator.innerText !== "" && navigator.innerText !== "To Do") {
-        showByStatus = navigator.innerText.toLowerCase();
+      showByStatus = navigator.innerText.toLowerCase();
     }
     const stringToFilter = input.value;
     if (showByStatus === "important") {
-        const filtered = allTasks["my-todo"].filter((item) => {
-            return item.priority > 2 && item.text.includes(stringToFilter) && item['data-status'] !== 'deleted';
-        });
-        list.replaceChildren();
-        recreateView(filtered);
-        return;
+      const filtered = allTasks["my-todo"].filter((item) => {
+        return item.priority > 2 && item.text.includes(stringToFilter) && item['data-status'] !== 'deleted';
+      });
+      list.replaceChildren();
+      recreateView(filtered);
+      return;
     } else if (showByStatus) {
-        if (showByStatus === 'deleted') {
-            deleteAllToRestoreAllAndReversed(deleteAllButton, 'restore');
-            
+      if (showByStatus === 'deleted') {
+        deleteAllToRestoreAllAndReversed(deleteAllButton, 'restore');
+        
+      }
+      else if (showByStatus === 'completed') {
+        checkAllToUncheckAllAndReversed(completeAllButton, 'uncheck')
+        
         }
         const filtered = allTasks["my-todo"].filter((item) => {
           return (
@@ -233,7 +255,7 @@ function updateCounter() {
         return task['data-status'] === 'deleted';
     });
     const importantTasks = allTasks["my-todo"].filter((task) => {
-        return task.priority > 2;
+        return task.priority > 2 && !(task['data-status'] === 'deleted');
     });
   document.getElementById("todo-counter").innerText = relevantTasks.length;
   document.getElementById("important-counter").innerText = importantTasks.length;
@@ -298,6 +320,7 @@ function recreateView(listToView = allTasks["my-todo"]) {
     } else if (item["data-status"] === "deleted") {
         checkbox.hidden = true;
       trashSpan.value = "Restore";
+      trashSpan.classList.add('deleted');
     }
     task.addEventListener('mouseover', (e) => {
     if (task && e.toElement===task) {
@@ -306,6 +329,9 @@ function recreateView(listToView = allTasks["my-todo"]) {
       // e.stopPropagation();
     }});
     task.addEventListener('mouseout', (e) => {
+      if (!e.toElement) {
+        return;
+      }
       if (e.toElement.classList.contains('todo-container') || e.toElement.id === 'content' ||  e.toElement.classList.contains('no-outline')) {
         if (e.fromElement===task && !task.classList.contains('in-choice') && !task.classList.contains('current')) {
           task.querySelector('.extended-data').style.display ='none';
@@ -384,11 +410,9 @@ async function completeTasks(tasksToComplete, action) {
 }
 //      consider to unite taskCompleter and deleteTasks functions
 function dataStatusChanger(elementOrObjectType, elementOrObject) {
-  // console.log(elementOrObject.);
   if (elementOrObjectType === "element") {
     const task =  elementOrObject.closest('.todo-container');
     if (task.dataset.status === "completed") {
-      console.log("alright!");
         task.dataset.status = "relevant";
         return;
     }
@@ -444,10 +468,6 @@ async function addMultipleTasks(multipleValue) {
     }
 }
 
-function menuHandler(params) {
-    console.log(" i am not defined!");
-}
-
 function deleteOrRestoreTask(task, action) {
     if (task.length === 0) {
         return;
@@ -463,7 +483,6 @@ function deleteOrRestoreTask(task, action) {
 }
 task.dataset.status = toStatus;
 task.querySelector(".checkbox").hidden = checkboxHiddenToState;
-  task.querySelector(".delete-button").innerText = toButtonContent;
   relevantTasks = allTasks["my-todo"].filter((item) => {
       if (item.date === task.querySelector(".todo-created-at").innerText) {
         item["data-status"] = toStatus;
@@ -471,6 +490,7 @@ task.querySelector(".checkbox").hidden = checkboxHiddenToState;
     return;
 });
   task.hidden = true;
+  showOnly();
 }
 
 function deleteOrRestoreAll(event) {
@@ -490,7 +510,7 @@ function deleteOrRestoreAll(event) {
 }
   const action = editedDeleteButtonText;
   deleteTasks(itemsToDeleteOrRestore, action);
-  deleteAllToRestoreAllAndReversed(event.target);
+  // deleteAllToRestoreAllAndReversed(event.target);
   cleanPage();
 }
 function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
@@ -505,13 +525,22 @@ function deleteAllToRestoreAllAndReversed(deleteAllButton, action) {
         deleteAllButton.dataset.action = "delete";
     }
 }
+function checkAllToUncheckAllAndReversed(deleteAllButton, action) {
+    if (action) {
+        completeAllButton.dataset.action = action;
+        return;
+    }
+    if (completeAllButton.dataset.action === "check") {
+        
+        completeAllButton.dataset.action = "uncheck";
+    } else {
+        completeAllButton.dataset.action = "check";
+    }
+}
 function menuLinksHandler(menuLink) {
     const navigator = document.getElementById("navigator");
     const navigationLink = menuLink.target.closest('.navigation-link');
     if (navigationLink){
-      if (navigationLink.id === "total-tasks") {
-        return;
-      }
         navigator.innerText = navigationLink.querySelector('.counter-text').innerText;
         cleanPage();
     }

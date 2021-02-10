@@ -15,7 +15,8 @@
     padding: 0;
 }
 body {
-
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     font-family:Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -123,6 +124,7 @@ height: 2rem;
 #Control {
     grid-row: 1;
     grid-column: 1/21;
+    max-width: 100%;
     display: flex;
     align-items: center;
     padding: 0;
@@ -200,7 +202,21 @@ height: 2rem;
 }
 /*      Delete All button by CSS         */
 #delete-all-button{
-margin-left: 1rem;
+    content: url("./assets/trash-full1.svg");
+    width: 32px;
+    margin-left: 1rem;
+}
+#delete-all-button[data-action= "restore"] {
+    content: url(./assets/restore-all.svg);
+}
+
+#complete-all-button {
+    content: url("./assets/checked-checkbox.svg");
+    width: 32px;
+}
+#complete-all-button[data-action= "uncheck"] {
+    content: url("./assets/uncheck-checkbox.svg");
+    width: 32px;
 }
 /*      Sort Button CSS         */
 #sort-button {
@@ -242,6 +258,7 @@ margin-left: 1rem;
 #keyboard-mode-header {
     display: flex;
     justify-content: center;
+    margin-top: 2rem;
     font-size: var(--heading-size);
 }
 #keyboard-mode-content {
@@ -318,8 +335,9 @@ margin-left: 1rem;
 
 .todo-text {
     display: inline-block;
-    /* pointer-events: none; */
-    
+    max-width: 30rem;
+    overflow: hidden;
+    text-overflow: clip;
 }
 .todo-priority {
     /* display: inline-block; */
@@ -328,7 +346,6 @@ margin-left: 1rem;
 }
 .todo-created-at {
     opacity: 40%;
-    pointer-events: ;
 }
 
 /* .delete-button {
@@ -336,14 +353,70 @@ margin-left: 1rem;
 } */
 
 .delete-button::before {
-    width: 0.3rem;
+    /* width: 0.3rem; */
     pointer-events: visibleFill;
     content:url(./assets/trash5.svg);
     stroke: var(--big-text-color);
     padding-left: 0.5rem;
 }
+.deleted {
+    /* background-color: blue; */
+    /* width: 0.3rem; */
+    pointer-events: visibleFill;
+    padding-left: 0.5rem;
+    content: url(./assets/restore3.svg);
+}
 
 hr {
     width: 90%;
     margin: 0 auto;
+}
+
+@media (max-width: 1100px) {
+    #main {
+        margin: 0;
+    }
+    #Control {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    #menu {
+        display: none;
+    }
+    #content {
+        grid-column: 1/21;
+        border-left: var(--border);
+    }
+    #navigator-container {
+        margin-left: none;
+    }
+    
+    .todo-text {
+        max-width: 30rem;
+    }
+    #input-span {
+        margin-left: 1rem;
+    }
+}
+@media(max-width: 600px) {
+    #input-span {
+        margin-left: 1rem;
+    }
+    #command-input {
+        display: none;
+    }
+    .todo-text {
+        max-width: 17rem;
+    }
+}@media(max-width: 400px) {
+    .todo-text {
+        max-width: 14rem;
+    }
+}@media(max-width: 350px) {
+    .todo-text {
+        max-width: 12rem;
+    }
+    #text-input {
+        display: none;
+    }
 }
